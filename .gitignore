@@ -1,0 +1,12 @@
+build/
+*.o
+*.key
+*.pem
+*.qna
+*.qns
+*.qnrl
+*.qnrv
+.env
+.env.*
+approval.*
+receipt*.json
