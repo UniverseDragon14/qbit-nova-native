@@ -70,11 +70,6 @@ QBIT NOVA source
 | Token revocation lookup | Implemented |
 | Issuer revocation lookup | Implemented |
 | Revocation execution wiring | Pending |
-| Stage 5.2 freeze | Pending |
-
-Revocation-store parsing and lookup are implemented, but revocation is not yet connected to the final `run` and `exec` execution boundary.
-
-HMAC v0.4 remains a legacy compatibility path without Ed25519 replay-ledger enforcement.
 
 ## Build and test
 
@@ -99,29 +94,6 @@ Strict build flags:
 -Wextra
 -Wpedantic
 -Werror
-```
-
-## Current security order
-
-```text
-signed approval
-→ trusted issuer verification
-→ capability validation
-→ bounded preflight
-→ replay consume
-→ execution
-```
-
-Planned next order:
-
-```text
-signed approval
-→ trusted issuer verification
-→ revocation check
-→ capability validation
-→ bounded preflight
-→ replay consume
-→ execution
 ```
 
 ## Project status
