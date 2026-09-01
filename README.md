@@ -26,6 +26,12 @@ QBIT NOVA does not claim that Raspberry Pi 5 or ordinary software becomes a phys
 
 It currently implements quantum-state simulation and a secure native execution architecture.
 
+## Pi5 evidence and branch boundary
+
+The [Pi5 GHZ3 200,000-shot record](docs/proofs/PI5_GHZ3_200K_20260825.md) reports exact source/QBC histogram agreement on the V10 Guardian development branch: 100,198 × `000`, 99,802 × `111`, and zero invalid states.
+
+The public `examples/ghz3.qn` SHA-256 exactly matches the source used by that run. However, public `main` does **not** currently contain the later Stage6 GPU routing, Stage7 typed-runtime, or V10 data/Guardian implementation files. The evidence document therefore separates source identity from compiler-branch identity.
+
 ## Native pipeline
 
 ```text
