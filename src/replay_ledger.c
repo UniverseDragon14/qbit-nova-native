@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/file.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -25,8 +26,45 @@
 
 typedef struct {
     int directory_fd;
+    bool directory_locked;
     char name[QN_PATH_CAP];
 } QNReplayPath;
+
+static int replay_path_lock(
+    QNReplayPath *path,
+    int operation
+) {
+    if (!path || path->directory_fd < 0) {
+        errno = EBADF;
+        return -1;
+    }
+
+    int result;
+
+    do {
+        result = flock(path->directory_fd, operation);
+    } while (result < 0 && errno == EINTR);
+
+    if (result == 0 && operation != LOCK_UN) {
+        path->directory_locked = true;
+    }
+
+    return result;
+}
+
+static void replay_path_unlock(QNReplayPath *path) {
+    if (!path ||
+        path->directory_fd < 0 ||
+        !path->directory_locked) {
+        return;
+    }
+
+    while (flock(path->directory_fd, LOCK_UN) < 0 &&
+           errno == EINTR) {
+    }
+
+    path->directory_locked = false;
+}
 
 static bool digest_is_zero(
     const uint8_t digest[QN_REPLAY_LEDGER_DIGEST_BYTES]
@@ -180,6 +218,7 @@ static bool pwrite_exact(
 
 static void replay_path_close(QNReplayPath *path) {
     if (path && path->directory_fd >= 0) {
+        replay_path_unlock(path);
         (void)close(path->directory_fd);
         path->directory_fd = -1;
     }
@@ -202,6 +241,7 @@ static QNStatus replay_path_open(
     }
 
     out->directory_fd = -1;
+    out->directory_locked = false;
     out->name[0] = '\0';
 
     size_t length = bounded_path_length(path);
@@ -604,6 +644,19 @@ QNStatus qn_replay_ledger_contains(
         return status;
     }
 
+    if (replay_path_lock(&replay_path, LOCK_SH) != 0) {
+        qn_diag_set_code(
+            diag,
+            "QN-E5202",
+            0,
+            0,
+            "cannot lock replay ledger directory: %s",
+            strerror(errno)
+        );
+        replay_path_close(&replay_path);
+        return QN_ERR_IO;
+    }
+
     int fd;
 
     do {
@@ -718,6 +771,19 @@ QNStatus qn_replay_ledger_consume(
 
     if (status != QN_OK) {
         return status;
+    }
+
+    if (replay_path_lock(&replay_path, LOCK_EX) != 0) {
+        qn_diag_set_code(
+            diag,
+            "QN-E5202",
+            0,
+            0,
+            "cannot lock replay ledger directory: %s",
+            strerror(errno)
+        );
+        replay_path_close(&replay_path);
+        return QN_ERR_IO;
     }
 
     int fd = -1;
