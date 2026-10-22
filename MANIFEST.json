@@ -1,240 +1,449 @@
 {
-  "project": "QBIT NOVA Native",
-  "creator": "Universal Dragon Aslam",
-  "release": "v0.5-stage5.1",
-  "stage": "openssl_ed25519_authenticated_approvals",
   "boundary": "software_virtual_qcpu",
-  "runtime_language": "C17",
-  "python_runtime_dependency": false,
-  "public_release": false,
-  "approval_authentication": [
-    "HMAC-SHA-256 v0.4 compatibility",
-    "OpenSSL EVP Ed25519"
-  ],
-  "security": {
-    "deny_by_default": true,
-    "source_scope_binding": true,
-    "expiry_validation": true,
-    "tamper_detection": true,
-    "blocked_capability_override": false,
-    "shell_exec_blocked": true,
-    "replay_ledger": false,
-    "revocation_store": false,
-    "multi_issuer_trust_store": false
-  },
-  "verification": {
-    "architecture": "aarch64",
-    "platform": "Raspberry Pi 5",
-    "openssl_version": "3.5.6",
-    "test_suite": "QBIT_NOVA_OPENSSL_ED25519_APPROVAL_TEST_SUITE_V05",
-    "result": "PASS",
-    "stage5_1_patch_sha256": "d24ef95798d0dcac2685893951da343bdb9dfa40fdb61463f02c1a36b45cbdcf",
-    "frozen_archive_sha256": "cccce237631bed1ce579300ee611fe4986a58dbdbf018e3d93be8edab7bddbf7"
-  },
-  "manifest_self_hash": false,
-  "source_tree_sha256": "17355b0cb8b66ddc5fb53172e1dd606f6f15637a1c1ba74300a0171fe5e0efe9",
-  "file_count": 40,
+  "creator": "Universal Dragon Aslam",
+  "file_count": 80,
   "files": [
     {
-      "path": ".github/workflows/ci.yml",
       "bytes": 874,
+      "path": ".github/workflows/ci.yml",
       "sha256": "4ccb92124eaeabf3e9a84ad3fd135a5267243a7272a6ba8a5bb09f0f6bb70993"
     },
     {
-      "path": ".gitignore",
       "bytes": 178,
+      "path": ".gitignore",
       "sha256": "9cbc8b8067041062f71aa7e1441976db74355b013950beb3ebf12c41a7c80c74"
     },
     {
+      "bytes": 4210,
       "path": "Makefile",
-      "bytes": 1046,
-      "sha256": "7d6edd334c9cbec717d82e333108727e286ad61429a5860a5be72ec8e91173a7"
+      "sha256": "c34b0b1d48e91a75ec848609f72702650c920cb4b7720cc0cd90b51edc07fee7"
     },
     {
+      "bytes": 4100,
       "path": "README.md",
-      "bytes": 3079,
-      "sha256": "db37cf0fdf1d921825f70a74062d79357af26be7d802f0ce06e5b5f51029af9f"
+      "sha256": "84f66212700e2631321ca5f7df40dc974e877f1b3a0f3ceff9eace7f2b3fe96a"
     },
     {
-      "path": "docs/ARCHITECTURE.md",
+      "bytes": 630,
+      "path": "SOURCE_SNAPSHOT.md",
+      "sha256": "ea58a5255954a0aab1cc3e18279b3ff85a24e76d86b8292080a4ba4948725f3d"
+    },
+    {
+      "bytes": 450496,
+      "path": "assets/qbit-nova-logo.jpg",
+      "sha256": "070cae3ca7c8c827c99be2d2ef664f2a2a660b32d1a1a0b64cf3ff279928ee9a"
+    },
+    {
       "bytes": 721,
+      "path": "docs/ARCHITECTURE.md",
       "sha256": "39c112f89b57faf91f708e2176a4682a3da36f83534880602ea0791a2414a594"
     },
     {
-      "path": "docs/AUTHENTICATED_APPROVAL_V04.md",
       "bytes": 1511,
+      "path": "docs/AUTHENTICATED_APPROVAL_V04.md",
       "sha256": "b06dee82378bbf17e8dd5a189cc5c29dca93c14fa76d0da9275bcefbe5d56dd3"
     },
     {
-      "path": "docs/CAPABILITY_GUARD_V03.md",
+      "bytes": 3523,
+      "path": "docs/BOUNDED_GPU_OPERATION_V06.md",
+      "sha256": "1a71c0f0e631ab0b91a3ae7bb355d7bb433163a3d12ec5278484538f2182e392"
+    },
+    {
       "bytes": 1050,
+      "path": "docs/CAPABILITY_GUARD_V03.md",
       "sha256": "cd026d3502996d0f6480df9df46a927f2ae0bd65618fb1817ee0fad748298797"
     },
     {
-      "path": "docs/ED25519_APPROVAL_V05.md",
       "bytes": 1720,
+      "path": "docs/ED25519_APPROVAL_V05.md",
       "sha256": "174a48f134e6e7bc17de077a54b171d18ff06f695aaa1e9ee6391362dd268d5a"
     },
     {
-      "path": "docs/NEXT_STAGES.md",
+      "bytes": 2278,
+      "path": "docs/GPU_ADAPTER_CONTRACT_V06.md",
+      "sha256": "75c11d94b3c53cebf97d5774164fdf42d2c6d8643e646e32f0d5d49899c04b85"
+    },
+    {
+      "bytes": 1977,
+      "path": "docs/GPU_COMPUTE_PROOF_V06.md",
+      "sha256": "c4de4c7136a5859f59b970d89e3e504041d0304c2d0e58a4551b40839d27a6ca"
+    },
+    {
+      "bytes": 1539,
+      "path": "docs/GPU_QVM_ROUTING_V06.md",
+      "sha256": "80d2d91e0bf320ad9dc6b8be2f50f738a4753944bc2222657f0e9472e793fdc8"
+    },
+    {
       "bytes": 728,
+      "path": "docs/NEXT_STAGES.md",
       "sha256": "60b6c329a759d2b3696c8f67c6480ce9805d26e7fe1f6a6a8a9abeb5445cb872"
     },
     {
-      "path": "docs/TYPED_QIR_V02.md",
+      "bytes": 2186,
+      "path": "docs/REPLAY_LEDGER_V052.md",
+      "sha256": "cdf8f868ed77757d8f1aaec9807b053f136e3a626bafed8cd992b37f293e4b15"
+    },
+    {
+      "bytes": 2250,
+      "path": "docs/REVOCATION_STORE_V052.md",
+      "sha256": "2bd01933770528df744b3c32dc555c901be0806107926e301e370cb8a77ed4ab"
+    },
+    {
+      "bytes": 1410,
+      "path": "docs/TRUST_STORE_FORMAT_V052.md",
+      "sha256": "4f866dbb2da47a6328d748c1fddc20a0ea156c7726c404f7d1766ae02dfe5ba1"
+    },
+    {
       "bytes": 842,
+      "path": "docs/TYPED_QIR_V02.md",
       "sha256": "b1f78b220b66b304399e471e72d83f1012bb241d2dfa316ed9d6c00aab8acfec"
     },
     {
-      "path": "examples/approval_model.qn",
+      "bytes": 2164,
+      "path": "docs/proofs/PI5_GHZ3_200K_20260825.md",
+      "sha256": "a26c7f978652685a4cbed68344498c9f0095ef803bf47af06aaf3d5dee296d4b"
+    },
+    {
+      "bytes": 3717,
+      "path": "docs/proofs/PI5_V3D_GPU_COMPUTE_20260814.md",
+      "sha256": "81f11ab9e9d4316df3ac8f5e56df68eb02d05bb6d12239cc28da3e5c37f9e49d"
+    },
+    {
+      "bytes": 683,
+      "path": "docs/proofs/PI5_V3D_GPU_COMPUTE_20261022.json",
+      "sha256": "3a9f027e167fb7d317863deb7c2d4afb8e3126e98a703ba878b5160f8abf91ea"
+    },
+    {
+      "bytes": 2025,
+      "path": "docs/proofs/PI5_V3D_GPU_ROUTING_20261022.md",
+      "sha256": "cc4ceed9623075495f1095d82d3f46e4b1a10eb9291fb38c7f019197ced75aa4"
+    },
+    {
       "bytes": 98,
+      "path": "examples/approval_model.qn",
       "sha256": "5bdcd8a7e6cf1464151e96d4bd73f25b80557e62c2111445667dea50ef5ecfb6"
     },
     {
-      "path": "examples/bell.qn",
       "bytes": 165,
+      "path": "examples/bell.qn",
       "sha256": "a399e88711d3465fbcf7fa6ad46cd7f32e791640b590c5f727046c3131486934"
     },
     {
-      "path": "examples/blocked_shell.qn",
       "bytes": 85,
+      "path": "examples/blocked_shell.qn",
       "sha256": "7c96c4ee57c3687020ea210db07e657c6ced3424ec627adab6213196637c8554"
     },
     {
-      "path": "examples/ghz3.qn",
       "bytes": 154,
+      "path": "examples/ghz3.qn",
       "sha256": "0934d5c09d0d651f253da285a3733b4e97c3e2c283d7835c1d1a76e00af0875f"
     },
     {
-      "path": "examples/single.qn",
       "bytes": 81,
+      "path": "examples/single.qn",
       "sha256": "7cc2124d76f7a94a0d047ad0f6a48ed0ec536591552efb7339d11cc6e8387bb3"
     },
     {
-      "path": "include/qn.h",
-      "bytes": 1371,
-      "sha256": "c18b4b445f25f6c9ca84ed031a9ef8503cbbf442c5e10c04ae44d91236a9c59d"
+      "bytes": 74,
+      "path": "examples/vector_add_u32.qn",
+      "sha256": "fd20313cbae8d5174d4655f396fe7090a0cdddaf11bd19939b47997de6da30df"
     },
     {
-      "path": "include/qn_approval.h",
+      "bytes": 1408,
+      "path": "include/qn.h",
+      "sha256": "ecf8bd0a87e0f9aa30e28ca6f02d00b6bf423fefa0612f5380bd74027e16d790"
+    },
+    {
       "bytes": 1740,
+      "path": "include/qn_approval.h",
       "sha256": "7e46e55e6529e719ada1dfabf36e968ba5e9479fa0491058f6fbe04b3717d4a7"
     },
     {
+      "bytes": 1250,
       "path": "include/qn_ast.h",
-      "bytes": 1164,
-      "sha256": "62e3eadd3ed62ef4eae2fb44333f45725cd5ebfb55c35dd0d84a873f0e259040"
+      "sha256": "f019d93df91714b84548753ca7e49f4d1d14da002955182aa46af378d54e5d83"
     },
     {
-      "path": "include/qn_ed25519.h",
       "bytes": 1307,
+      "path": "include/qn_ed25519.h",
       "sha256": "cd4fb6c3dd8e50a338874493c39b9fa8991d1167e27ebb0d8f3e064b8ecf3dda"
     },
     {
+      "bytes": 1888,
+      "path": "include/qn_gpu_adapter.h",
+      "sha256": "5b3596feddc7e6a7825bfb4488075bf848a5783f45999acb59adc83af2117773"
+    },
+    {
+      "bytes": 1147,
+      "path": "include/qn_gpu_compute.h",
+      "sha256": "db57dab44b0019136e64ee99d2a50cd4b0a7d9a085bfde9407e788b98fd2f3dd"
+    },
+    {
+      "bytes": 805,
+      "path": "include/qn_gpu_routing.h",
+      "sha256": "021f3a3abec34085231b115cc04958aeadc94401550239970e052f49809a7b9f"
+    },
+    {
+      "bytes": 2323,
       "path": "include/qn_guard.h",
-      "bytes": 2243,
-      "sha256": "7fa27f2903b86467da2ed70e56939abc33a39241719c01ea19f04e227cb386ca"
+      "sha256": "a5b1cdedb1eaa378abb0e94f553fc2f9b683bfa756b68d58ccbc7d02579cbe3f"
     },
     {
+      "bytes": 832,
       "path": "include/qn_lexer.h",
-      "bytes": 808,
-      "sha256": "9f07e45fa62fa2bdd324b3789296fa967b4ef27d29b03516f5ff59536cd275d7"
+      "sha256": "03256700da4dc9d42b746d550636eebcbba192701887938ba75aef3a0848b330"
     },
     {
-      "path": "include/qn_parser.h",
       "bytes": 174,
+      "path": "include/qn_parser.h",
       "sha256": "530ce4dcc3391553cef98b86a2bca8fb24815064a53f71196566a7365873ef78"
     },
     {
+      "bytes": 1336,
       "path": "include/qn_qbc.h",
-      "bytes": 1245,
-      "sha256": "f14f46a37b734a9a4210af61e2ae1a8dcf499c669576e7d10535e55a41e9c925"
+      "sha256": "1b574e50f04d2a307f66fe3764f38ab68ae1a034ba7532822571bb653d8164e5"
     },
     {
+      "bytes": 1526,
       "path": "include/qn_qir.h",
-      "bytes": 1474,
-      "sha256": "71315ada3a99e95cce5c85b2cf52af7efd261eb9ea00b7a23938bf14da0bd81c"
+      "sha256": "b38040d20768421b988f9bb9ec43c57eda642d0e6089e804adbcf0443e3d3e14"
     },
     {
-      "path": "include/qn_signed_approval.h",
+      "bytes": 737,
+      "path": "include/qn_replay_ledger.h",
+      "sha256": "e898d1b1e076d34a676548f160ff0da86fe215e5564226bb78b03c66753e3e24"
+    },
+    {
+      "bytes": 1458,
+      "path": "include/qn_revocation_store.h",
+      "sha256": "3e82765d909874f6e9a8fcdffb049d30e20b8f5881ac3d497de0e980cd782945"
+    },
+    {
       "bytes": 2302,
+      "path": "include/qn_signed_approval.h",
       "sha256": "b4ad73044c9a6d738b510fdf17e34ad8179bd9ac62d7d996b2a0d33b65e29acb"
     },
     {
-      "path": "include/qn_vm.h",
-      "bytes": 1090,
-      "sha256": "2f921347d2bed3ea41fb40d70afe83481956616667867e2a0a9d16c76a0bac74"
+      "bytes": 1299,
+      "path": "include/qn_trust_store.h",
+      "sha256": "c839bb21d50c8a858503ad742d1425f5aa428d5281178feb04884772b0ecca40"
     },
     {
-      "path": "src/approval.c",
+      "bytes": 1895,
+      "path": "include/qn_vm.h",
+      "sha256": "735e0c3a49292a0da269a76d5109e19a7e28efea60741eb35fedc72db46be437"
+    },
+    {
       "bytes": 16585,
+      "path": "src/approval.c",
       "sha256": "9fbd8d5ca65b9d364bd9f6bac4375eb560d9e2de56226a24b35a7af25693c2d4"
     },
     {
-      "path": "src/ed25519.c",
       "bytes": 7836,
+      "path": "src/ed25519.c",
       "sha256": "2328c0abee5befff178c3a0758962895b76dfcf655914ce4b90b8d4732781f1e"
     },
     {
+      "bytes": 21246,
+      "path": "src/gpu_adapter.c",
+      "sha256": "c488d69c83501ca7b10a40d95f3f18f22af258c40d4fdd12a728f352894803b0"
+    },
+    {
+      "bytes": 50661,
+      "path": "src/gpu_compute.c",
+      "sha256": "e24cad2556ddcf41a0efc9404c03ec4aaff33dc19612bd236fe4bdeb009eeaf2"
+    },
+    {
+      "bytes": 6024,
+      "path": "src/gpu_routing.c",
+      "sha256": "467f209614db4069d662369939a7595a67d257af3e00034586e9261911da39ff"
+    },
+    {
+      "bytes": 6551,
       "path": "src/guard.c",
-      "bytes": 6492,
-      "sha256": "4330dc5abdd5543e1540afe1426296dce1a708f78f49247cd6dc4ff5fca05a71"
+      "sha256": "983873900ce0e80a2e702d9c8a9c5f1c556e6e42a0809bd3e457794467e195a6"
     },
     {
+      "bytes": 6322,
       "path": "src/lexer.c",
-      "bytes": 6159,
-      "sha256": "19a0975cccbd16c083e8585bcbafe767bca937f9e6712e3c6300e61368ca6de6"
+      "sha256": "b275597bd6da84d6d6c8910f0b51b39cb68bafe92c79c7351d5d4f6124811ac8"
     },
     {
+      "bytes": 46490,
       "path": "src/main.c",
-      "bytes": 33731,
-      "sha256": "280e0d272ca057d3c135cac2a931fdf3e2a8a7d4cda551572246beaccf2d0f47"
+      "sha256": "eea5c8bf8b12b0042a390ff73333a945307df73057b63bc08688595b33eb5a31"
     },
     {
+      "bytes": 8937,
       "path": "src/parser.c",
-      "bytes": 8467,
-      "sha256": "91fc60e81921bd54e32c482a36b8eec36ed5bb6b5247eb82cd6917b766949178"
+      "sha256": "d6508484d6c7941dc543db23513fd8e813653f3cccd6c82bd94bcec1896d8aec"
     },
     {
+      "bytes": 10757,
       "path": "src/qbc.c",
-      "bytes": 7782,
-      "sha256": "cb001beb20b9c13256260689565f27d9fc0543a7c1b1bc9047ef9c845d79db16"
+      "sha256": "824072c478478efd74a836b133a05a3dfd3344b71f234d0b5a24ae7baa8047ce"
     },
     {
+      "bytes": 24532,
       "path": "src/qir.c",
-      "bytes": 18793,
-      "sha256": "70e72e0610ab2970d5a290c17dfceabeccbfc18a701c09f0fd7cce9d556274b4"
+      "sha256": "bffeb2244adc6743a3c8e2faed82cbf7e6aa2acb2c12fddffb0a1af63fce8834"
     },
     {
-      "path": "src/sha256.c",
+      "bytes": 18777,
+      "path": "src/replay_ledger.c",
+      "sha256": "677c00df07835ca391e84b9a2ae7e195ca75d451966d052b0388c1cf66f80375"
+    },
+    {
+      "bytes": 16201,
+      "path": "src/revocation_store.c",
+      "sha256": "267fe819de17cc28c4ecaf0c4ebe109b5e641a0854fc52683bcbd69dc7f01838"
+    },
+    {
       "bytes": 3571,
+      "path": "src/sha256.c",
       "sha256": "e6191d3c81b702e32a6362669138870800b8cc25be36dbcbabc1eb8943e589f2"
     },
     {
-      "path": "src/signed_approval.c",
       "bytes": 20207,
+      "path": "src/signed_approval.c",
       "sha256": "b823dae3a6b4775cbf54f086538969b250c4747733b4067ebbf3368973737b5f"
     },
     {
-      "path": "src/util.c",
+      "bytes": 4879,
+      "path": "src/trust_store.c",
+      "sha256": "5dfef9ec890112cc234fd0633b02e085bc1a3c781a305bb1d8ad524a45f4b94d"
+    },
+    {
+      "bytes": 8753,
+      "path": "src/trust_store_file.c",
+      "sha256": "558022cbcd6e8347543ed8fb6484b5bda789732494121accce3654edb1e0a963"
+    },
+    {
       "bytes": 3704,
+      "path": "src/util.c",
       "sha256": "6306c9320f76a4c97ac8ecc3ee77aab87a8b11aaa961b5604313c150809674c3"
     },
     {
+      "bytes": 27008,
       "path": "src/vm.c",
-      "bytes": 10548,
-      "sha256": "f29a40faff160e7128ef88fa0fc0382eecf9cbdaf6eeeb1705d87ea3e07d53e9"
+      "sha256": "1c257f6cd6c4d8ad2ae2673c43170866d7a3378cc14ca0941b269eca659cdcda"
     },
     {
-      "path": "tests/bad_unknown_register.qn",
+      "bytes": 61,
+      "path": "tests/bad_gpu_duplicate_operation.qn",
+      "sha256": "bdb667306589c6d8075abe72d2d54e1d0fb4fbf6d791e2db6309891956508440"
+    },
+    {
+      "bytes": 48,
+      "path": "tests/bad_gpu_extra_capability.qn",
+      "sha256": "e135a7dc3b0975fe11de567ac37a394f25ba73e6946da045b1efb9fcd24b1f84"
+    },
+    {
+      "bytes": 22,
+      "path": "tests/bad_gpu_missing_emit.qn",
+      "sha256": "eb32df1d1a2a65735f62727f7f6d732469df83a9f39f9fb00c834bb78d10979d"
+    },
+    {
+      "bytes": 64,
+      "path": "tests/bad_gpu_mixed_quantum.qn",
+      "sha256": "f59b0c5d0762b28face80ac724cce072ef7be70181b4850fa4f139fa33a532bf"
+    },
+    {
+      "bytes": 39,
+      "path": "tests/bad_gpu_shots.qn",
+      "sha256": "b01a1b9ec7db69f96f250ce0d1797ba27ba011920ac76ef557775d00772673a6"
+    },
+    {
       "bytes": 66,
+      "path": "tests/bad_unknown_register.qn",
       "sha256": "9b36bf6c912403bd9c4de36402c01f668c29b9d28c6ca001abac02035f436ca9"
     },
     {
+      "bytes": 33999,
       "path": "tests/run_tests.sh",
-      "bytes": 8338,
-      "sha256": "53e05916186070a5e0892dcfc76d1a46f26bf1b0a595a89ec6a75c364ded9ff0"
+      "sha256": "5f36b877c3947a21a7c16024779be34908f4c00b5c39ce20e830f5cfe0832f48"
+    },
+    {
+      "bytes": 4161,
+      "path": "tests/test_bounded_gpu_operation.c",
+      "sha256": "313ccb3d02b1f677e096d1fb5b588c4a530a33de78855041bf488794aaddc2d2"
+    },
+    {
+      "bytes": 3055,
+      "path": "tests/test_gpu_adapter.c",
+      "sha256": "e255bb99c86f42e83ee69925daf62479efc29df5d296e45436abf8985f1f5cf3"
+    },
+    {
+      "bytes": 1791,
+      "path": "tests/test_gpu_compute.c",
+      "sha256": "00842b337256f8641bc564c295f35cb86fd5c1bb163f2c5c5be4edc9a425ba3b"
+    },
+    {
+      "bytes": 3177,
+      "path": "tests/test_gpu_routing.c",
+      "sha256": "27f9842878dcd3402929ba054cf48bcbcb365fa75188ad3bcf56a88eed6a898e"
+    },
+    {
+      "bytes": 13459,
+      "path": "tests/test_replay_ledger.c",
+      "sha256": "807c6a946e52eff79f93a7c8cb02edc98120a73344b1a57d4c481c15669b65bd"
+    },
+    {
+      "bytes": 12187,
+      "path": "tests/test_revocation_store.c",
+      "sha256": "53475e01149f34ede7ea89c28fd80892da05033ae12ed4ed65b744af39245b88"
+    },
+    {
+      "bytes": 7841,
+      "path": "tests/test_trust_store.c",
+      "sha256": "9625a5f62451353dd3a8e1c4098e5bb656a6cb2a953c23f5923345a4317cfe76"
+    },
+    {
+      "bytes": 9137,
+      "path": "tests/test_trust_store_file.c",
+      "sha256": "edc5fc6a977ef3b30ab1a138860271308e00de8b03f5fd899dff060c90272aef"
     }
   ],
-  "qbit_nova_c_touched": false
+  "manifest_schema_version": 2,
+  "manifest_self_hash": false,
+  "project": "QBIT NOVA Native",
+  "public_release": true,
+  "python_runtime_dependency": false,
+  "release": "stage6-gpu-routing-research-preview",
+  "runtime_language": "C17",
+  "security": {
+    "blocked_capability_override": false,
+    "deny_by_default": true,
+    "expiry_validation": true,
+    "multi_issuer_trust_store": true,
+    "replay_ledger": true,
+    "revocation_store": true,
+    "shell_exec_blocked": true,
+    "source_scope_binding": true,
+    "tamper_detection": true
+  },
+  "source_tree_hash_algorithm": "SHA-256 of sorted UTF-8 lines: <relative-path><space><file-sha256> followed by LF; excludes MANIFEST.json and generated build outputs",
+  "source_tree_sha256": "c6f84ef8da84ec73abc52116f1d437cfa3d913af546601b3a559d0c4dbd6490a",
+  "stage": "bounded_v3d_gpu_compute_and_truthful_qvm_routing",
+  "truth_boundary": {
+    "arbitrary_shader_execution": false,
+    "bounded_gpu_operation": "uint32-vector-add-256",
+    "physical_qpu": false,
+    "quantum_state_simulation_gpu_eligible": false
+  },
+  "verification": {
+    "architecture": "aarch64",
+    "backend": "Vulkan",
+    "bounded_gpu_operation": "uint32-vector-add",
+    "cpu_fallback": false,
+    "cpu_reference_validated": true,
+    "element_count": 256,
+    "full_test_suite": "PASS",
+    "gpu_device": "V3D 7.1.7.0",
+    "gpu_result_match": true,
+    "gpu_vendor_id": "0x14e4",
+    "hardware_run_date": "2026-10-22",
+    "output_sha256": "68a036d2c3ab163b9ff7ac887010b699fba71e94c89c29f4da908e08a9e5026b",
+    "platform": "Raspberry Pi 5"
+  }
 }

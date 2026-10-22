@@ -80,8 +80,23 @@ Therefore the two evidence records prove different things:
 
 The GPU evidence must not be presented as physical quantum hardware, quantum acceleration of the 200,000-shot GHZ run, or quantum speedup.
 
-## Scope boundary
+## Public-source revalidation — 2026-10-22
 
-This page records inspected Pi 5 evidence artifacts and their reported hashes/results. It does not claim that all development-branch GPU implementation files are present on public `main`.
+The Stage 6 implementation is now synchronized into the public source tree. The integrated public-source snapshot was built with strict C17 flags and its complete `make test` suite passed on the Raspberry Pi 5. A fresh real-hardware run also completed:
 
-Reproducing the exact GPU execution requires the corresponding development implementation, Vulkan/V3D environment and proof inputs. Public documentation should keep this distinction until that implementation is fully synchronized and independently reproducible from the public branch.
+```text
+requested_backend=vulkan
+selected_backend=vulkan
+selection_reason=explicit-verified-v3d
+hardware_device=V3D 7.1.7.0
+hardware_vendor_id=0x14e4
+element_count=256
+gpu_execution_attempted=true
+gpu_execution_completed=true
+cpu_reference_validated=true
+result_match=true
+cpu_fallback=false
+output_sha256=68a036d2c3ab163b9ff7ac887010b699fba71e94c89c29f4da908e08a9e5026b
+```
+
+The raw JSON receipt is [`PI5_V3D_GPU_COMPUTE_20261022.json`](./PI5_V3D_GPU_COMPUTE_20261022.json). It is evidence for this bounded vector-add operation only. Quantum-state simulation remains CPU-only in Stage 6; this is not a physical QPU or a quantum-speedup claim. Reproduction requires a compatible Raspberry Pi 5 V3D/Vulkan environment; CPU-only systems can run the CPU reference and regression tests but cannot reproduce physical GPU execution.

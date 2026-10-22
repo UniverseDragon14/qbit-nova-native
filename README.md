@@ -30,7 +30,7 @@ It currently implements quantum-state simulation and a secure native execution a
 
 The [Pi5 GHZ3 200,000-shot record](docs/proofs/PI5_GHZ3_200K_20260825.md) reports exact source/QBC histogram agreement on the V10 Guardian development branch: 100,198 × `000`, 99,802 × `111`, and zero invalid states.
 
-The public `examples/ghz3.qn` SHA-256 exactly matches the source used by that run. However, public `main` does **not** currently contain the later Stage6 GPU routing, Stage7 typed-runtime, or V10 data/Guardian implementation files. The evidence document therefore separates source identity from compiler-branch identity.
+The public `examples/ghz3.qn` SHA-256 exactly matches the source used by that run. The Stage 6 bounded V3D compute proof and QVM GPU-routing implementation are now included in this public source tree. Stage 7 typed-runtime and V10 data/Guardian implementation files remain development-branch work. The evidence document separates source identity from compiler-branch identity.
 
 ## Native pipeline
 
@@ -64,6 +64,16 @@ QBIT NOVA source
 - Deterministic execution results and receipts
 - `shell.exec` blocked by default
 
+## Stage 6 GPU routing and V3D compute
+
+The native runtime includes a deny-by-default Vulkan adapter, a bounded `uint32-vector-add` V3D compute proof, and truthful QVM backend routing. Build and run the full suite with `make test`.
+
+- `qnova gpu compute-proof --backend vulkan --receipt proof.json` requires verified Broadcom V3D hardware and fails closed if the required device/driver contract is not met.
+- `qnova run` / `qnova exec` accept `--backend cpu|auto|vulkan`. `auto` routes the bounded vector-add operation to verified V3D when available. Quantum-state simulation remains CPU-only in Stage 6; explicit Vulkan for that ineligible operation fails closed rather than silently claiming GPU execution.
+- The bounded V3D kernel is a GPU compute proof, not a quantum-state GPU simulator or physical QPU.
+- `docs/GPU_ADAPTER_CONTRACT_V06.md`, `docs/GPU_COMPUTE_PROOF_V06.md`, `docs/GPU_QVM_ROUTING_V06.md`, and `docs/BOUNDED_GPU_OPERATION_V06.md` document the scope and constraints.
+- Fresh Pi 5 hardware receipts: [`V3D compute`](docs/proofs/PI5_V3D_GPU_COMPUTE_20261022.json) and [`source/QBC auto-routing`](docs/proofs/PI5_V3D_GPU_ROUTING_20261022.md).
+
 ## Security status
 
 | Layer | Status |
@@ -75,7 +85,7 @@ QBIT NOVA source
 | Exec replay protection | Implemented |
 | Token revocation lookup | Implemented |
 | Issuer revocation lookup | Implemented |
-| Revocation execution wiring | Pending |
+| Revocation execution wiring | Implemented; regression-tested |
 
 ## Build and test
 

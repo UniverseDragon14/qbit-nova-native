@@ -1,0 +1,20 @@
+{
+  "schema": "QBIT_NOVA_GPU_COMPUTE_PROOF_V06",
+  "proof_version": 1,
+  "operation": "uint32-vector-add",
+  "requested_backend": "vulkan",
+  "selected_backend": "vulkan",
+  "selection_reason": "explicit-verified-v3d",
+  "hardware_device": "V3D 7.1.7.0",
+  "hardware_vendor_id": "0x14e4",
+  "element_count": 256,
+  "local_size_x": 64,
+  "dispatch_x": 4,
+  "gpu_execution_attempted": true,
+  "gpu_execution_completed": true,
+  "cpu_reference_validated": true,
+  "result_match": true,
+  "cpu_fallback": false,
+  "shader_sha256": "ae8c774d3923daf84f2ed729173226eab6923703997ccca5f718b1b3f47ae239",
+  "output_sha256": "68a036d2c3ab163b9ff7ac887010b699fba71e94c89c29f4da908e08a9e5026b"
+}

@@ -7,6 +7,10 @@
 #include "qn_signed_approval.h"
 #include "qn_trust_store.h"
 #include "qn_replay_ledger.h"
+#include "qn_revocation_store.h"
+#include "qn_gpu_adapter.h"
+#include "qn_gpu_compute.h"
+#include "qn_gpu_routing.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -34,13 +38,19 @@ static void usage(FILE *f) {
         "            [--nonce TEXT]\n"
         "  qnova approval verify <file.qn> <token.qna> --key-file KEY\n"
         "            [--now UNIX]\n"
+        "  qnova gpu probe [--backend auto|cpu|vulkan]\n"
+        "            [--receipt file.json]\n"
+        "  qnova gpu compute-proof [--backend auto|cpu|vulkan]\n"
+        "            [--receipt file.json]\n"
         "  qnova build <file.qn> -o <file.qbc>\n"
         "  qnova run <file.qn> [--shots N] [--seed N] [--policy safe|deny-all]\n"
         "            [--signed-approval-file token.qns]\n"
         "            [--approval-public-key-file PUBLIC]\n"
         "            [--trust-store-file STORE]\n"
         "            [--replay-ledger-file LEDGER]\n"
+        "            [--revocation-store-file STORE]\n"
         "            [--approval-file token.qna --approval-key-file KEY]\n"
+        "            [--backend cpu|auto|vulkan]\n"
         "            [--now UNIX] [--receipt file.json]\n"
         "  qnova exec <file.qbc> [same execution options]\n"
         "  qnova version\n");
@@ -112,6 +122,8 @@ static uint64_t parse_u64(const char *s, const char *name) {
 typedef struct {
     uint32_t shots;
     uint64_t seed;
+    bool shots_explicit;
+    bool seed_explicit;
     const char *receipt;
     const char *approval_file;
     const char *approval_key_file;
@@ -119,8 +131,11 @@ typedef struct {
     const char *approval_public_key_file;
     const char *trust_store_file;
     const char *replay_ledger_file;
+    const char *revocation_store_file;
     uint64_t approval_now;
     bool has_approval_now;
+    QNGpuBackendRequest backend;
+    bool backend_explicit;
     QNGuardPolicy policy;
 } RunOptions;
 
@@ -129,13 +144,16 @@ static void parse_run_opts(int argc,
                            int from,
                            RunOptions *options) {
     memset(options, 0, sizeof(*options));
+    options->backend = QN_GPU_BACKEND_CPU;
     qn_guard_policy_safe(&options->policy);
 
     for(int i=from;i<argc;i++) {
         if(!strcmp(argv[i],"--shots") && i+1<argc) {
             options->shots=(uint32_t)parse_u64(argv[++i],"shots");
+            options->shots_explicit=true;
         } else if(!strcmp(argv[i],"--seed") && i+1<argc) {
             options->seed=parse_u64(argv[++i],"seed");
+            options->seed_explicit=true;
         } else if(!strcmp(argv[i],"--receipt") && i+1<argc) {
             options->receipt=argv[++i];
         } else if(!strcmp(argv[i],"--policy") && i+1<argc) {
@@ -155,6 +173,14 @@ static void parse_run_opts(int argc,
             options->trust_store_file=argv[++i];
         } else if(!strcmp(argv[i],"--replay-ledger-file") && i+1<argc) {
             options->replay_ledger_file=argv[++i];
+        } else if(!strcmp(argv[i],"--revocation-store-file") && i+1<argc) {
+            options->revocation_store_file=argv[++i];
+        } else if(!strcmp(argv[i],"--backend") && i+1<argc) {
+            if(!qn_gpu_backend_parse(argv[++i],&options->backend)) {
+                fprintf(stderr,"unknown backend: %s\n",argv[i]);
+                exit(QN_ERR_PARSE);
+            }
+            options->backend_explicit=true;
         } else if(!strcmp(argv[i],"--now") && i+1<argc) {
             options->approval_now=parse_u64(argv[++i],"now");
             options->has_approval_now=true;
@@ -254,6 +280,8 @@ static QNStatus apply_approval_to_policy(
     bool has_public_key = options->approval_public_key_file != NULL;
     bool has_trust_store = options->trust_store_file != NULL;
     bool has_replay_ledger = options->replay_ledger_file != NULL;
+    bool has_revocation_store =
+        options->revocation_store_file != NULL;
 
     if (has_hmac_file != has_hmac_key) {
         qn_diag_set_code(
@@ -303,6 +331,19 @@ static QNStatus apply_approval_to_policy(
             "Ed25519 execution requires both "
             "--signed-approval-file and "
             "--replay-ledger-file"
+        );
+        return QN_ERR_RUNTIME;
+    }
+
+    if (has_signed_file != has_revocation_store) {
+        qn_diag_set_code(
+            diag,
+            "QN-E6109",
+            0,
+            0,
+            "Ed25519 execution requires both "
+            "--signed-approval-file and "
+            "--revocation-store-file"
         );
         return QN_ERR_RUNTIME;
     }
@@ -422,9 +463,66 @@ static QNStatus apply_approval_to_policy(
 }
 
 
+
+static QNStatus check_revocation_before_replay(
+    const RunOptions *options,
+    const QNGuardPolicy *policy,
+    QNDiagnostic *diag
+) {
+    if (!options || !policy) {
+        qn_diag_set_code(
+            diag,
+            "QN-E6101",
+            0,
+            0,
+            "invalid revocation execution arguments"
+        );
+        return QN_ERR_RUNTIME;
+    }
+
+    if (!options->signed_approval_file) {
+        return QN_OK;
+    }
+
+    if (!options->revocation_store_file ||
+        !policy->has_approval_digest ||
+        !policy->has_approval_issuer) {
+        qn_diag_set_code(
+            diag,
+            "QN-E6109",
+            0,
+            0,
+            "verified Ed25519 execution requires "
+            "revocation state"
+        );
+        return QN_ERR_RUNTIME;
+    }
+
+    QNRevocationStore store;
+    QNStatus status = qn_revocation_store_load_file(
+        options->revocation_store_file,
+        &store,
+        diag
+    );
+
+    if (status != QN_OK) {
+        return status;
+    }
+
+    return qn_revocation_store_check(
+        &store,
+        policy->approval_digest,
+        policy->approval_issuer_fingerprint,
+        diag
+    );
+}
+
+
 static QNStatus preflight_before_replay_consume(
     const QNBytecode *bc,
     uint32_t requested_shots,
+    bool shots_explicit,
+    bool seed_explicit,
     const QNGuardPolicy *policy,
     QNDiagnostic *diag
 ) {
@@ -436,6 +534,20 @@ static QNStatus preflight_before_replay_consume(
 
     if (status != QN_OK) {
         return status;
+    }
+
+    if (qn_qbc_is_bounded_u32_vector_add(bc)) {
+        if (shots_explicit || seed_explicit) {
+            qn_diag_set_code(
+                diag,
+                "QN-E7410",
+                0,
+                0,
+                "bounded vector-add does not accept --shots or --seed"
+            );
+            return QN_ERR_PARSE;
+        }
+        return QN_OK;
     }
 
     uint32_t shots = requested_shots
@@ -475,12 +587,111 @@ int main(int argc,char **argv) {
     if(argc<2){ usage(stderr); return 1; }
     if(!strcmp(argv[1],"version")){
         printf("QBIT NOVA Native %d.%d.%d\n",QN_VERSION_MAJOR,QN_VERSION_MINOR,QN_VERSION_PATCH);
-        printf("runtime=C17\npython_dependency=false\nboundary=software_virtual_qcpu\n");
+        printf("runtime=C17\npython_dependency=false\nboundary=software_virtual_qcpu,native_bounded_compute\n");
         return 0;
     }
     if(argc<3){ usage(stderr); return 1; }
 
     QNDiagnostic diag={0};
+
+    if(!strcmp(argv[1],"gpu")) {
+        const bool is_probe = strcmp(argv[2],"probe") == 0;
+        const bool is_compute =
+            strcmp(argv[2],"compute-proof") == 0;
+
+        if(!is_probe && !is_compute) {
+            qn_diag_set_code(
+                &diag,
+                "QN-E7002",
+                0,
+                0,
+                "expected GPU subcommand: probe or compute-proof"
+            );
+            return print_diag(QN_ERR_PARSE,&diag);
+        }
+
+        QNGpuBackendRequest requested = QN_GPU_BACKEND_AUTO;
+        const char *receipt_path = NULL;
+
+        for(int i=3;i<argc;i++) {
+            if(!strcmp(argv[i],"--backend") && i+1<argc) {
+                if(!qn_gpu_backend_parse(argv[++i],&requested)) {
+                    qn_diag_set_code(
+                        &diag,
+                        "QN-E7002",
+                        0,
+                        0,
+                        "unknown GPU backend: %s",
+                        argv[i]
+                    );
+                    return print_diag(QN_ERR_PARSE,&diag);
+                }
+            } else if(!strcmp(argv[i],"--receipt") && i+1<argc) {
+                receipt_path=argv[++i];
+            } else {
+                qn_diag_set_code(
+                    &diag,
+                    "QN-E7002",
+                    0,
+                    0,
+                    "unknown GPU option: %s",
+                    argv[i]
+                );
+                return print_diag(QN_ERR_PARSE,&diag);
+            }
+        }
+
+        if(is_compute) {
+            QNGpuComputeProof proof;
+            QNStatus status=qn_gpu_compute_proof(
+                requested,
+                &proof,
+                &diag
+            );
+            if(status!=QN_OK) return print_diag(status,&diag);
+
+            qn_gpu_compute_print(&proof,stdout);
+
+            if(receipt_path) {
+                status=qn_gpu_compute_write_receipt(
+                    receipt_path,
+                    &proof,
+                    &diag
+                );
+                if(status!=QN_OK) return print_diag(status,&diag);
+                printf("receipt=%s\n",receipt_path);
+            }
+            return 0;
+        }
+
+        QNGpuProbe probe;
+        QNStatus status=qn_gpu_probe(&probe,&diag);
+        if(status!=QN_OK) return print_diag(status,&diag);
+
+        QNGpuDecision decision;
+        status=qn_gpu_decide(
+            requested,
+            &probe,
+            &decision,
+            &diag
+        );
+        if(status!=QN_OK) return print_diag(status,&diag);
+
+        qn_gpu_print_contract(&probe,&decision,stdout);
+
+        if(receipt_path) {
+            status=qn_gpu_write_receipt(
+                receipt_path,
+                &probe,
+                &decision,
+                &diag
+            );
+            if(status!=QN_OK) return print_diag(status,&diag);
+            printf("receipt=%s\n",receipt_path);
+        }
+
+        return 0;
+    }
 
     if(!strcmp(argv[1],"lex")) {
         size_t size=0; char *source=qn_read_text_file(argv[2],&size,&diag);
@@ -1137,10 +1348,44 @@ int main(int argc,char **argv) {
             return print_diag(st,&diag);
         }
 
+        bool revocation_checked=false;
+
+        st=check_revocation_before_replay(
+            &options,
+            &options.policy,
+            &diag
+        );
+
+        if(st!=QN_OK) {
+            qn_bytecode_free(&bc);
+            return print_diag(st,&diag);
+        }
+
+        if(options.signed_approval_file) {
+            revocation_checked=true;
+        }
+
         st=preflight_before_replay_consume(
             &bc,
             options.shots,
+            options.shots_explicit,
+            options.seed_explicit,
             &options.policy,
+            &diag
+        );
+
+        if(st!=QN_OK) {
+            qn_bytecode_free(&bc);
+            return print_diag(st,&diag);
+        }
+
+        QNGpuQvmRoute qvm_route;
+
+        st=qn_gpu_route_qvm(
+            options.backend,
+            options.backend_explicit,
+            &bc,
+            &qvm_route,
             &diag
         );
 
@@ -1182,15 +1427,19 @@ int main(int argc,char **argv) {
             options.shots,
             options.seed,
             &options.policy,
+            &qvm_route,
             &result,
             &diag
         );
         if(st==QN_OK) {
-            qn_print_result(&bc,&result,stdout);
+            result.approval_revocation_checked =
+                revocation_checked;
+            result.approval_token_revoked = false;
+            result.approval_issuer_revoked = false;
+            result.approval_replay_consumed =
+                replay_consumed;
 
-            if(replay_consumed) {
-                printf("approval_replay=consumed\n");
-            }
+            qn_print_result(&bc,&result,stdout);
         }
 
         if(st==QN_OK && options.receipt) {
