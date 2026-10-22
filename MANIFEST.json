@@ -14,21 +14,6 @@
       "sha256": "9cbc8b8067041062f71aa7e1441976db74355b013950beb3ebf12c41a7c80c74"
     },
     {
-      "bytes": 4210,
-      "path": "Makefile",
-      "sha256": "c34b0b1d48e91a75ec848609f72702650c920cb4b7720cc0cd90b51edc07fee7"
-    },
-    {
-      "bytes": 4100,
-      "path": "README.md",
-      "sha256": "84f66212700e2631321ca5f7df40dc974e877f1b3a0f3ceff9eace7f2b3fe96a"
-    },
-    {
-      "bytes": 630,
-      "path": "SOURCE_SNAPSHOT.md",
-      "sha256": "ea58a5255954a0aab1cc3e18279b3ff85a24e76d86b8292080a4ba4948725f3d"
-    },
-    {
       "bytes": 450496,
       "path": "assets/qbit-nova-logo.jpg",
       "sha256": "070cae3ca7c8c827c99be2d2ef664f2a2a660b32d1a1a0b64cf3ff279928ee9a"
@@ -79,26 +64,6 @@
       "sha256": "60b6c329a759d2b3696c8f67c6480ce9805d26e7fe1f6a6a8a9abeb5445cb872"
     },
     {
-      "bytes": 2186,
-      "path": "docs/REPLAY_LEDGER_V052.md",
-      "sha256": "cdf8f868ed77757d8f1aaec9807b053f136e3a626bafed8cd992b37f293e4b15"
-    },
-    {
-      "bytes": 2250,
-      "path": "docs/REVOCATION_STORE_V052.md",
-      "sha256": "2bd01933770528df744b3c32dc555c901be0806107926e301e370cb8a77ed4ab"
-    },
-    {
-      "bytes": 1410,
-      "path": "docs/TRUST_STORE_FORMAT_V052.md",
-      "sha256": "4f866dbb2da47a6328d748c1fddc20a0ea156c7726c404f7d1766ae02dfe5ba1"
-    },
-    {
-      "bytes": 842,
-      "path": "docs/TYPED_QIR_V02.md",
-      "sha256": "b1f78b220b66b304399e471e72d83f1012bb241d2dfa316ed9d6c00aab8acfec"
-    },
-    {
       "bytes": 2164,
       "path": "docs/proofs/PI5_GHZ3_200K_20260825.md",
       "sha256": "a26c7f978652685a4cbed68344498c9f0095ef803bf47af06aaf3d5dee296d4b"
@@ -117,6 +82,26 @@
       "bytes": 2025,
       "path": "docs/proofs/PI5_V3D_GPU_ROUTING_20261022.md",
       "sha256": "cc4ceed9623075495f1095d82d3f46e4b1a10eb9291fb38c7f019197ced75aa4"
+    },
+    {
+      "bytes": 2438,
+      "path": "docs/REPLAY_LEDGER_V052.md",
+      "sha256": "eaae45bf1decd9ccb3006dfb9a2afa8106d871f2742f9676810167372ba395a0"
+    },
+    {
+      "bytes": 2250,
+      "path": "docs/REVOCATION_STORE_V052.md",
+      "sha256": "2bd01933770528df744b3c32dc555c901be0806107926e301e370cb8a77ed4ab"
+    },
+    {
+      "bytes": 1410,
+      "path": "docs/TRUST_STORE_FORMAT_V052.md",
+      "sha256": "4f866dbb2da47a6328d748c1fddc20a0ea156c7726c404f7d1766ae02dfe5ba1"
+    },
+    {
+      "bytes": 842,
+      "path": "docs/TYPED_QIR_V02.md",
+      "sha256": "b1f78b220b66b304399e471e72d83f1012bb241d2dfa316ed9d6c00aab8acfec"
     },
     {
       "bytes": 98,
@@ -147,11 +132,6 @@
       "bytes": 74,
       "path": "examples/vector_add_u32.qn",
       "sha256": "fd20313cbae8d5174d4655f396fe7090a0cdddaf11bd19939b47997de6da30df"
-    },
-    {
-      "bytes": 1408,
-      "path": "include/qn.h",
-      "sha256": "ecf8bd0a87e0f9aa30e28ca6f02d00b6bf423fefa0612f5380bd74027e16d790"
     },
     {
       "bytes": 1740,
@@ -234,6 +214,26 @@
       "sha256": "735e0c3a49292a0da269a76d5109e19a7e28efea60741eb35fedc72db46be437"
     },
     {
+      "bytes": 1408,
+      "path": "include/qn.h",
+      "sha256": "ecf8bd0a87e0f9aa30e28ca6f02d00b6bf423fefa0612f5380bd74027e16d790"
+    },
+    {
+      "bytes": 4210,
+      "path": "Makefile",
+      "sha256": "c34b0b1d48e91a75ec848609f72702650c920cb4b7720cc0cd90b51edc07fee7"
+    },
+    {
+      "bytes": 4100,
+      "path": "README.md",
+      "sha256": "84f66212700e2631321ca5f7df40dc974e877f1b3a0f3ceff9eace7f2b3fe96a"
+    },
+    {
+      "bytes": 630,
+      "path": "SOURCE_SNAPSHOT.md",
+      "sha256": "ea58a5255954a0aab1cc3e18279b3ff85a24e76d86b8292080a4ba4948725f3d"
+    },
+    {
       "bytes": 16585,
       "path": "src/approval.c",
       "sha256": "9fbd8d5ca65b9d364bd9f6bac4375eb560d9e2de56226a24b35a7af25693c2d4"
@@ -289,9 +289,9 @@
       "sha256": "bffeb2244adc6743a3c8e2faed82cbf7e6aa2acb2c12fddffb0a1af63fce8834"
     },
     {
-      "bytes": 18777,
+      "bytes": 20237,
       "path": "src/replay_ledger.c",
-      "sha256": "677c00df07835ca391e84b9a2ae7e195ca75d451966d052b0388c1cf66f80375"
+      "sha256": "d4d014af7cf88076a982b36d92a634ff2a6798388a8b24e6eccee27b3ad1fccb"
     },
     {
       "bytes": 16201,
@@ -309,14 +309,14 @@
       "sha256": "b823dae3a6b4775cbf54f086538969b250c4747733b4067ebbf3368973737b5f"
     },
     {
-      "bytes": 4879,
-      "path": "src/trust_store.c",
-      "sha256": "5dfef9ec890112cc234fd0633b02e085bc1a3c781a305bb1d8ad524a45f4b94d"
-    },
-    {
       "bytes": 8753,
       "path": "src/trust_store_file.c",
       "sha256": "558022cbcd6e8347543ed8fb6484b5bda789732494121accce3654edb1e0a963"
+    },
+    {
+      "bytes": 4879,
+      "path": "src/trust_store.c",
+      "sha256": "5dfef9ec890112cc234fd0633b02e085bc1a3c781a305bb1d8ad524a45f4b94d"
     },
     {
       "bytes": 3704,
@@ -394,14 +394,14 @@
       "sha256": "53475e01149f34ede7ea89c28fd80892da05033ae12ed4ed65b744af39245b88"
     },
     {
-      "bytes": 7841,
-      "path": "tests/test_trust_store.c",
-      "sha256": "9625a5f62451353dd3a8e1c4098e5bb656a6cb2a953c23f5923345a4317cfe76"
-    },
-    {
       "bytes": 9137,
       "path": "tests/test_trust_store_file.c",
       "sha256": "edc5fc6a977ef3b30ab1a138860271308e00de8b03f5fd899dff060c90272aef"
+    },
+    {
+      "bytes": 7841,
+      "path": "tests/test_trust_store.c",
+      "sha256": "9625a5f62451353dd3a8e1c4098e5bb656a6cb2a953c23f5923345a4317cfe76"
     }
   ],
   "manifest_schema_version": 2,
@@ -423,7 +423,7 @@
     "tamper_detection": true
   },
   "source_tree_hash_algorithm": "SHA-256 of sorted UTF-8 lines: <relative-path><space><file-sha256> followed by LF; excludes MANIFEST.json and generated build outputs",
-  "source_tree_sha256": "c6f84ef8da84ec73abc52116f1d437cfa3d913af546601b3a559d0c4dbd6490a",
+  "source_tree_sha256": "da41a0d848bb7a921448abd6a0059cf60e2714db7c64075ca20d90cf3005cefd",
   "stage": "bounded_v3d_gpu_compute_and_truthful_qvm_routing",
   "truth_boundary": {
     "arbitrary_shader_execution": false,
