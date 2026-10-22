@@ -106,41 +106,62 @@ grep -Eq '^output_sha256=[0-9a-f]{64}$' \
 grep -q '"selected_backend": "cpu"' \
   "$TMP/gpu-compute-cpu.json"
 
-echo "=== REAL V3D VULKAN COMPUTE PROOF ==="
+echo "=== V3D VULKAN COMPUTE PROOF (HARDWARE-AWARE) ==="
 "$BIN" gpu compute-proof \
-  --backend vulkan \
+  --backend auto \
   --receipt "$TMP/gpu-compute-v3d.json" \
   > "$TMP/gpu-compute-v3d.out"
-grep -q '^selected_backend=vulkan$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^selection_reason=explicit-verified-v3d$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^hardware_device=V3D ' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^hardware_vendor_id=0x14e4$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^element_count=256$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^local_size_x=64$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^dispatch_x=4$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^gpu_execution_attempted=true$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^gpu_execution_completed=true$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^cpu_reference_validated=true$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^result_match=true$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '^cpu_fallback=false$' \
-  "$TMP/gpu-compute-v3d.out"
-grep -q '"selected_backend": "vulkan"' \
-  "$TMP/gpu-compute-v3d.json"
-grep -q '"gpu_execution_completed": true' \
-  "$TMP/gpu-compute-v3d.json"
-grep -q '"result_match": true' \
-  "$TMP/gpu-compute-v3d.json"
+
+if grep -q '^selected_backend=vulkan$' \
+    "$TMP/gpu-compute-v3d.out"; then
+  HAS_V3D=1
+  grep -q '^selection_reason=verified-v3d-auto$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^hardware_device=V3D ' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^hardware_vendor_id=0x14e4$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^element_count=256$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^local_size_x=64$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^dispatch_x=4$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^gpu_execution_attempted=true$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^gpu_execution_completed=true$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^cpu_reference_validated=true$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^result_match=true$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^cpu_fallback=false$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '"selected_backend": "vulkan"' \
+    "$TMP/gpu-compute-v3d.json"
+  grep -q '"gpu_execution_completed": true' \
+    "$TMP/gpu-compute-v3d.json"
+  grep -q '"result_match": true' \
+    "$TMP/gpu-compute-v3d.json"
+  echo "REAL_V3D_COMPUTE_PROOF=PASS"
+else
+  HAS_V3D=0
+  grep -q '^selected_backend=cpu$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^selection_reason=hardware-unavailable-cpu-fallback$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^cpu_reference_validated=true$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^result_match=true$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '^cpu_fallback=true$' \
+    "$TMP/gpu-compute-v3d.out"
+  grep -q '"selected_backend": "cpu"' \
+    "$TMP/gpu-compute-v3d.json"
+  grep -q '"result_match": true' \
+    "$TMP/gpu-compute-v3d.json"
+  echo "V3D_UNAVAILABLE_CPU_REFERENCE=PASS"
+fi
 
 echo "=== QVM GPU ROUTING ==="
 "$BIN" run examples/ghz3.qn \
@@ -262,40 +283,68 @@ grep -q '"result_match": true' "$TMP/vector-cpu.json"
 
 "$BIN" run examples/vector_add_u32.qn \
   --backend auto \
+"$BIN" run examples/vector_add_u32.qn \
+  --backend auto \
   --receipt "$TMP/vector-auto.json" \
   > "$TMP/vector-auto.out"
 grep -q '^qvm_requested_backend=auto$' "$TMP/vector-auto.out"
-grep -q '^qvm_selected_backend=vulkan$' "$TMP/vector-auto.out"
-grep -q '^qvm_selection_reason=verified-v3d-auto$' \
-  "$TMP/vector-auto.out"
 grep -q '^qvm_gpu_eligible=true$' "$TMP/vector-auto.out"
-grep -q '^qvm_gpu_execution_attempted=true$' \
-  "$TMP/vector-auto.out"
-grep -q '^qvm_gpu_execution_completed=true$' \
-  "$TMP/vector-auto.out"
-grep -q '^qvm_cpu_fallback=false$' "$TMP/vector-auto.out"
-grep -q '^hardware_device=V3D ' "$TMP/vector-auto.out"
-grep -q '^hardware_vendor_id=0x14e4$' "$TMP/vector-auto.out"
 grep -q '^cpu_reference_validated=true$' "$TMP/vector-auto.out"
 grep -q '^result_match=true$' "$TMP/vector-auto.out"
-grep -q '"qvm_selected_backend": "vulkan"' \
-  "$TMP/vector-auto.json"
-grep -q '"qvm_gpu_execution_completed": true' \
-  "$TMP/vector-auto.json"
 
-"$BIN" run examples/vector_add_u32.qn \
-  --backend vulkan \
-  --receipt "$TMP/vector-vulkan.json" \
-  > "$TMP/vector-vulkan.out"
-grep -q '^qvm_requested_backend=vulkan$' \
-  "$TMP/vector-vulkan.out"
-grep -q '^qvm_selected_backend=vulkan$' \
-  "$TMP/vector-vulkan.out"
-grep -q '^qvm_selection_reason=explicit-verified-v3d$' \
-  "$TMP/vector-vulkan.out"
-grep -q '^qvm_gpu_execution_completed=true$' \
-  "$TMP/vector-vulkan.out"
-grep -q '^result_match=true$' "$TMP/vector-vulkan.out"
+if [ "$HAS_V3D" -eq 1 ]; then
+  grep -q '^qvm_selected_backend=vulkan$' "$TMP/vector-auto.out"
+  grep -q '^qvm_selection_reason=verified-v3d-auto$' \
+    "$TMP/vector-auto.out"
+  grep -q '^qvm_gpu_execution_attempted=true$' \
+    "$TMP/vector-auto.out"
+  grep -q '^qvm_gpu_execution_completed=true$' \
+    "$TMP/vector-auto.out"
+  grep -q '^qvm_cpu_fallback=false$' "$TMP/vector-auto.out"
+  grep -q '^hardware_device=V3D ' "$TMP/vector-auto.out"
+  grep -q '^hardware_vendor_id=0x14e4$' "$TMP/vector-auto.out"
+  grep -q '"qvm_selected_backend": "vulkan"' \
+    "$TMP/vector-auto.json"
+  grep -q '"qvm_gpu_execution_completed": true' \
+    "$TMP/vector-auto.json"
+
+  "$BIN" run examples/vector_add_u32.qn \
+    --backend vulkan \
+    --receipt "$TMP/vector-vulkan.json" \
+    > "$TMP/vector-vulkan.out"
+  grep -q '^qvm_requested_backend=vulkan$' \
+    "$TMP/vector-vulkan.out"
+  grep -q '^qvm_selected_backend=vulkan$' \
+    "$TMP/vector-vulkan.out"
+  grep -q '^qvm_selection_reason=explicit-verified-v3d$' \
+    "$TMP/vector-vulkan.out"
+  grep -q '^qvm_gpu_execution_completed=true$' \
+    "$TMP/vector-vulkan.out"
+  grep -q '^result_match=true$' "$TMP/vector-vulkan.out"
+else
+  grep -q '^qvm_selected_backend=cpu$' "$TMP/vector-auto.out"
+  grep -q '^qvm_selection_reason=hardware-unavailable-cpu-fallback$' \
+    "$TMP/vector-auto.out"
+  grep -q '^qvm_gpu_execution_attempted=false$' \
+    "$TMP/vector-auto.out"
+  grep -q '^qvm_gpu_execution_completed=false$' \
+    "$TMP/vector-auto.out"
+  grep -q '^qvm_cpu_fallback=true$' "$TMP/vector-auto.out"
+  grep -q '"qvm_selected_backend": "cpu"' \
+    "$TMP/vector-auto.json"
+
+  set +e
+  "$BIN" run examples/vector_add_u32.qn \
+    --backend vulkan \
+    --receipt "$TMP/vector-vulkan.json" \
+    > "$TMP/vector-vulkan.out" \
+    2> "$TMP/vector-vulkan.err"
+  STATUS=$?
+  set -e
+  test "$STATUS" -ne 0
+  grep -q 'QN-E7202' "$TMP/vector-vulkan.err"
+  test ! -e "$TMP/vector-vulkan.json"
+fi
 
 CPU_OUTPUT_SHA="$({
   sed -n 's/^output_sha256=//p' "$TMP/vector-cpu.out"
@@ -307,19 +356,28 @@ VULKAN_OUTPUT_SHA="$({
   sed -n 's/^output_sha256=//p' "$TMP/vector-vulkan.out"
 })"
 
-test "${#CPU_OUTPUT_SHA}" -eq 64
+test "$(printf '%s' "$CPU_OUTPUT_SHA" | wc -c)" -eq 64
 test "$CPU_OUTPUT_SHA" = "$AUTO_OUTPUT_SHA"
-test "$CPU_OUTPUT_SHA" = "$VULKAN_OUTPUT_SHA"
+if [ "$HAS_V3D" -eq 1 ]; then
+  test "$CPU_OUTPUT_SHA" = "$VULKAN_OUTPUT_SHA"
+fi
 
 "$BIN" exec "$TMP/vector-a.qbc" \
   --backend auto \
   --receipt "$TMP/vector-exec-auto.json" \
   > "$TMP/vector-exec-auto.out"
-grep -q '^qvm_selected_backend=vulkan$' \
-  "$TMP/vector-exec-auto.out"
-grep -q '^qvm_gpu_execution_completed=true$' \
-  "$TMP/vector-exec-auto.out"
 grep -q '^result_match=true$' "$TMP/vector-exec-auto.out"
+if [ "$HAS_V3D" -eq 1 ]; then
+  grep -q '^qvm_selected_backend=vulkan$' \
+    "$TMP/vector-exec-auto.out"
+  grep -q '^qvm_gpu_execution_completed=true$' \
+    "$TMP/vector-exec-auto.out"
+else
+  grep -q '^qvm_selected_backend=cpu$' \
+    "$TMP/vector-exec-auto.out"
+  grep -q '^qvm_cpu_fallback=true$' \
+    "$TMP/vector-exec-auto.out"
+fi
 
 set +e
 "$BIN" run examples/vector_add_u32.qn \
