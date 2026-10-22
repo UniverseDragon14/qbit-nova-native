@@ -283,8 +283,6 @@ grep -q '"result_match": true' "$TMP/vector-cpu.json"
 
 "$BIN" run examples/vector_add_u32.qn \
   --backend auto \
-"$BIN" run examples/vector_add_u32.qn \
-  --backend auto \
   --receipt "$TMP/vector-auto.json" \
   > "$TMP/vector-auto.out"
 grep -q '^qvm_requested_backend=auto$' "$TMP/vector-auto.out"
