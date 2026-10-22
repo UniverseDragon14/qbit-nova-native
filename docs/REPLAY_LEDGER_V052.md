@@ -17,6 +17,7 @@ Rules:
 - New ledgers are created with mode `0600`.
 - Existing ledgers with group or other permissions are rejected.
 - Symbolic-link and hard-link ledger files are rejected.
+- Each operation also locks the trusted parent directory (shared for lookup, exclusive for consume) before opening the ledger. This serializes first-time creation so concurrent callers cannot observe a newly created but not-yet-initialized empty file.
 - Reads use a shared POSIX advisory file lock.
 - Consumption uses an exclusive POSIX advisory file lock.
 - Check and append occur inside one exclusive critical section.
