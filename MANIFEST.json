@@ -359,9 +359,9 @@
       "sha256": "9b36bf6c912403bd9c4de36402c01f668c29b9d28c6ca001abac02035f436ca9"
     },
     {
-      "bytes": 33999,
+      "bytes": 35791,
       "path": "tests/run_tests.sh",
-      "sha256": "5f36b877c3947a21a7c16024779be34908f4c00b5c39ce20e830f5cfe0832f48"
+      "sha256": "1ea8cd255e581a12bdf3d1a6e06eb0e0479d556d76e15cefd8bea8b44ee1b350"
     },
     {
       "bytes": 4161,
@@ -423,7 +423,7 @@
     "tamper_detection": true
   },
   "source_tree_hash_algorithm": "SHA-256 of sorted UTF-8 lines: <relative-path><space><file-sha256> followed by LF; excludes MANIFEST.json and generated build outputs",
-  "source_tree_sha256": "da41a0d848bb7a921448abd6a0059cf60e2714db7c64075ca20d90cf3005cefd",
+  "source_tree_sha256": "d3926d9a40aec3f7c6f68771b046cff1a3c71e5c701359ee321c9bb71d7be31a",
   "stage": "bounded_v3d_gpu_compute_and_truthful_qvm_routing",
   "truth_boundary": {
     "arbitrary_shader_execution": false,
